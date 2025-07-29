@@ -3,8 +3,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
-import ProductsPage from './pages/ProductsPage';
-import ProductDetailPage from './pages/ProductDetailPage';
+// import ProductsPage from './pages/ProductsPage';
+// import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
 
 const queryClient = new QueryClient({
