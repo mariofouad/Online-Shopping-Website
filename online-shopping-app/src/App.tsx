@@ -23,8 +23,8 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/products" element={<ProductsPage />} />
-            <Route path="/products/:id" element={<ProductDetailPage />} />
+            {/* <Route path="/products" element={<ProductsPage />} /> */}
+            {/* <Route path="/products/:id" element={<ProductDetailPage />} /> */}
             <Route path="/cart" element={<CartPage />} />
           </Routes>
         </Layout>
