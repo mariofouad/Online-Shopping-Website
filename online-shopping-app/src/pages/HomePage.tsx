@@ -238,7 +238,29 @@ export default function HomePage() {
                         <h2 className="text-3xl lg:text-5xl font-extrabold text-gray-900 mb-4">BROWSE BY DRESS STYLE</h2>
                     </div>
 
-                    <div className="grid grid-cols-12 gap-6 h-[578px]">
+                    {/* Mobile Layout */}
+                    <div className="grid grid-cols-1 gap-6 md:hidden">
+                        {styleCategories.map((category) => (
+                            <Link
+                                key={category.name}
+                                to={`/products?style=${category.name.toLowerCase()}`}
+                                className="relative overflow-hidden rounded-2xl group bg-white h-48"
+                            >
+                                <img
+                                    src={category.image}
+                                    alt={category.name}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors"></div>
+                                <div className="absolute top-6 left-6">
+                                    <h3 className="text-2xl font-bold text-black">{category.name}</h3>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+
+                    {/* Desktop Layout */}
+                    <div className="hidden md:grid grid-cols-12 gap-6 h-[578px]">
                         {/* Casual - Top Left (Small) */}
                         <Link
                             to="/products?style=casual"
@@ -309,8 +331,8 @@ export default function HomePage() {
             {/* Customer Reviews */}
             <section className="container mx-auto px-4 py-16">
                 <div className="flex items-center justify-between mb-12">
-                    <h2 className="text-3xl lg:text-5xl font-extrabold text-gray-900">OUR HAPPY CUSTOMERS</h2>
-                    <div className="flex gap-2">
+                    <h2 className="text-2xl md:text-3xl lg:text-5xl font-extrabold text-gray-900">OUR HAPPY CUSTOMERS</h2>
+                    <div className="hidden md:flex gap-2">
                         <button
                             onClick={prevReview}
                             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -326,7 +348,35 @@ export default function HomePage() {
                     </div>
                 </div>
 
-                <div className="relative overflow-hidden">
+                {/* Mobile Reviews - Simple Grid */}
+                <div className="grid grid-cols-1 gap-6 md:hidden">
+                    {customerReviews.slice(0, 3).map((review, index) => (
+                        <div key={index} className="bg-white border border-gray-200 rounded-3xl p-6">
+                            {/* Star Rating */}
+                            <div className="flex mb-3">
+                                {[...Array(review.rating)].map((_, i) => (
+                                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                                ))}
+                            </div>
+                            
+                            {/* Reviewer Name with Verified Icon */}
+                            <div className="flex items-center gap-2 mb-3">
+                                <p className="font-bold text-lg text-gray-900">{review.name}</p>
+                                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                    <Check className="w-4 h-4 text-white" />
+                                </div>
+                            </div>
+                            
+                            {/* Review Text */}
+                            <p className="text-gray-700 leading-relaxed text-base">
+                                "{review.review}"
+                            </p>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Desktop Reviews - Carousel */}
+                <div className="hidden md:block relative overflow-hidden">
                     <div 
                         className="flex transition-transform duration-500 ease-in-out gap-6"
                         style={{ 
