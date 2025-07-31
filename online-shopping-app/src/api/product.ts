@@ -39,27 +39,27 @@ export const productsApi = {
     return response.data;
   },
   
-  // getFeatured: async () => {
-  //   const response = await apiClient.get<Product[]>('/products/featured');
-  //   return response.data;
-  // },
+  getFeatured: async () => {
+    const response = await apiClient.get<Product[]>('/products/featured');
+    return response.data;
+  },
 
-  // getByCategory: async (category: string) => {
-  //   const response = await apiClient.get<Product[]>(`/products/category/${category}`);
-  //   return response.data;
-  // },
+  getByCategory: async (category: string) => {
+    const response = await apiClient.get<Product[]>(`/products/category/${category}`);
+    return response.data;
+  },
   
-  // create: async (product: Omit<Product, 'id'>) => {
-  //   const response = await apiClient.post<Product>('/products', product);
-  //   return response.data;
-  // },
+  create: async (product: Omit<Product, 'id'>) => {
+    const response = await apiClient.post<Product>('/products', product);
+    return response.data;
+  },
 
-  // update: async (id: string, product: Partial<Product>) => {
-  //   const response = await apiClient.put<Product>(`/products/${id}`, product);
-  //   return response.data;
-  // },
+  update: async (id: string, product: Partial<Product>) => {
+    const response = await apiClient.put<Product>(`/products/${id}`, product);
+    return response.data;
+  },
 
-  // delete: async (id: string) => {
-  //   await apiClient.delete(`/products/${id}`);
-  // }
+  delete: async (id: string) => {
+    await apiClient.delete(`/products/${id}`);
+  }
 };
