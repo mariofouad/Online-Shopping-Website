@@ -23,11 +23,6 @@ export default function ProductsPage() {
     });
 
     const categories = [
-        'T-shirts',
-        'Shorts',
-        'Shirts',
-        'Hoodie',
-        'Jeans',
         'New Arrivals',
         'Top Selling'
     ];
@@ -58,7 +53,7 @@ export default function ProductsPage() {
     }
 
     return (
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8 px-4 lg:px-8 py-6">
             {/* Sidebar Filters */}
             <aside className={`lg:w-64 ${showFilters ? 'block' : 'hidden lg:block'}`}>
                 <div className="bg-white border border-gray-200 rounded-lg p-6">

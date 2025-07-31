@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Twitter, Facebook, Instagram, Github } from 'lucide-react';
+import visa from '../../assets/visa_logo.png';
+import applePay from '../../assets/apple_pay.png';
+import googlePay from '../../assets/google_pay.png';
+import payPal from '../../assets/paypal.png';
+import masterCard from '../../assets/master_card.png';
 import toast from 'react-hot-toast';
 
 export default function Footer() {
@@ -9,7 +14,6 @@ export default function Footer() {
     const handleNewsletterSignup = (e: React.FormEvent) => {
         e.preventDefault();
         if (email.trim()) {
-            // TODO: Call newsletter API
             toast.success('Successfully subscribed to newsletter!');
             setEmail('');
         }
@@ -129,11 +133,11 @@ export default function Footer() {
                             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                                 <p className="text-gray-600">Shop.co © 2000-2023, All Rights Reserved</p>
                                 <div className="flex items-center gap-3">
-                                    <img src="/visa.png" alt="Visa" className="h-8 w-auto" />
-                                    <img src="/mastercard.png" alt="Mastercard" className="h-8 w-auto" />
-                                    <img src="/paypal.png" alt="PayPal" className="h-8 w-auto" />
-                                    <img src="/apple-pay.png" alt="Apple Pay" className="h-8 w-auto" />
-                                    <img src="/google-pay.png" alt="Google Pay" className="h-8 w-auto" />
+                                    <img src={visa} alt="Visa" className="h-8 w-auto" />
+                                    <img src={masterCard} alt="Mastercard" className="h-8 w-auto" />
+                                    <img src={payPal} alt="PayPal" className="h-8 w-auto" />
+                                    <img src={applePay} alt="Apple Pay" className="h-8 w-auto" />
+                                    <img src={googlePay} alt="Google Pay" className="h-8 w-auto" />
                                 </div>
                             </div>
                         </div>

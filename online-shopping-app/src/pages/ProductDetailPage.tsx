@@ -11,6 +11,7 @@ export default function ProductDetailPage() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
   const { addItem } = useCartStore();
 
   const { data: product, isLoading } = useQuery({
@@ -19,12 +20,14 @@ export default function ProductDetailPage() {
     enabled: !!id
   });
 
-  const sizes = ['XS', 'S', 'M', 'L', 'XL'];
-
   const handleAddToCart = () => {
     if (!product) return;
     if (!selectedSize) {
       toast.error('Please select a size');
+      return;
+    }
+    if (!selectedColor) {
+      toast.error('Please select a color');
       return;
     }
 
@@ -59,10 +62,10 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 px-4 lg:px-8 py-6">
       {/* Product Images */}
       <div className="space-y-4">
-        <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+        <div className="aspect-square bg-gray-100 rounded-3xl overflow-hidden">
           <img
             src={product.images[selectedImage] || '/placeholder-product.jpg'}
             alt={product.name}
@@ -103,30 +106,66 @@ export default function ProductDetailPage() {
               <span className="ml-2 text-gray-600">4.5/5</span>
             </div>
           </div>
-          <p className="text-3xl font-bold">${product.price}</p>
+          <div className="flex items-center gap-3 mb-4">
+            <p className="text-3xl font-bold">${product.price}</p>
+            {product.originalPrice && product.originalPrice > product.price && (
+              <>
+                <span className="text-2xl text-gray-400 line-through font-bold">
+                  ${product.originalPrice}
+                </span>
+                <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-medium">
+                  -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
+                </span>
+              </>
+            )}
+          </div>
         </div>
 
         <p className="text-gray-600">{product.description}</p>
 
-        {/* Size Selection */}
-        <div>
-          <h3 className="font-medium mb-3">Select Size</h3>
-          <div className="flex gap-2">
-            {sizes.map((size) => (
-              <button
-                key={size}
-                onClick={() => setSelectedSize(size)}
-                className={`px-4 py-2 border rounded-lg ${
-                  selectedSize === size
-                    ? 'border-black bg-black text-white'
-                    : 'border-gray-300 hover:border-gray-400'
-                }`}
-              >
-                {size}
-              </button>
-            ))}
+        {/* Color Selection */}
+        {product.colors && product.colors.length > 0 && (
+          <div>
+            <h3 className="font-medium mb-3">Select Colors</h3>
+            <div className="flex gap-2 flex-wrap">
+              {product.colors.map((color) => (
+                <button
+                  key={color}
+                  onClick={() => setSelectedColor(color)}
+                  className={`px-4 py-2 border rounded-lg ${
+                    selectedColor === color
+                      ? 'border-black bg-black text-white'
+                      : 'border-gray-300 hover:border-gray-400'
+                  }`}
+                >
+                  {color}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Size Selection */}
+        {product.sizes && product.sizes.length > 0 && (
+          <div>
+            <h3 className="font-medium mb-3">Select Size</h3>
+            <div className="flex gap-2 flex-wrap">
+              {product.sizes.map((size) => (
+                <button
+                  key={size}
+                  onClick={() => setSelectedSize(size)}
+                  className={`px-4 py-2 border rounded-lg ${
+                    selectedSize === size
+                      ? 'border-black bg-black text-white'
+                      : 'border-gray-300 hover:border-gray-400'
+                  }`}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Quantity and Add to Cart */}
         <div className="flex gap-4">
@@ -166,6 +205,12 @@ export default function ProductDetailPage() {
               <span className="text-gray-600">Stock:</span>
               <span>{product.stock} available</span>
             </div>
+            {product.brand && (
+              <div className="flex justify-between">
+                <span className="text-gray-600">Brand:</span>
+                <span>{product.brand}</span>
+              </div>
+            )}
           </div>
         </div>
       </div>

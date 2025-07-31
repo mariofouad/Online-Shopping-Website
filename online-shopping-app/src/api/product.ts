@@ -12,8 +12,8 @@ export interface Product {
   rating?: number;
   reviewCount?: number;
   brand?: string;
-  sizes?: string[];
-  colors?: string[];
+  sizes: string[];
+  colors: string[];
 }
 
 export interface ProductFilters {
