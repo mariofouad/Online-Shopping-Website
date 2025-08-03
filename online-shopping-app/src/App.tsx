@@ -6,7 +6,7 @@ import HomePage from './pages/HomePage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
-import DashboardPage from './pages/dashboard';
+import DashboardPage from './pages/Dashboard';
 
 const queryClient = new QueryClient({
   defaultOptions: {
