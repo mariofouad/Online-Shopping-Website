@@ -43,6 +43,8 @@ export default function HomePage() {
     ];
 
     const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+    const [currentNewArrivalsIndex, setCurrentNewArrivalsIndex] = useState(0);
+    const [currentTopSellingIndex, setCurrentTopSellingIndex] = useState(0);
 
     const customerReviews = [
         {
@@ -97,6 +99,39 @@ export default function HomePage() {
         setCurrentReviewIndex((prev) =>
             prev - 1 < 0 ? customerReviews.length - 3 : prev - 1
         );
+    };
+
+    // Product carousel controls
+    const nextNewArrivals = () => {
+        if (newArrivals) {
+            setCurrentNewArrivalsIndex((prev) =>
+                prev + 1 >= newArrivals.length - 1 ? 0 : prev + 1
+            );
+        }
+    };
+
+    const prevNewArrivals = () => {
+        if (newArrivals) {
+            setCurrentNewArrivalsIndex((prev) =>
+                prev - 1 < 0 ? newArrivals.length - 2 : prev - 1
+            );
+        }
+    };
+
+    const nextTopSelling = () => {
+        if (topSelling) {
+            setCurrentTopSellingIndex((prev) =>
+                prev + 1 >= topSelling.length - 1 ? 0 : prev + 1
+            );
+        }
+    };
+
+    const prevTopSelling = () => {
+        if (topSelling) {
+            setCurrentTopSellingIndex((prev) =>
+                prev - 1 < 0 ? topSelling.length - 2 : prev - 1
+            );
+        }
     };
 
     return (
@@ -193,10 +228,51 @@ export default function HomePage() {
                     <h2 className="text-3xl lg:text-5xl font-extrabold text-gray-900 mb-4">NEW ARRIVALS</h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                {/* Desktop Grid - Hidden on mobile */}
+                <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     {newArrivals?.slice(0, 4).map((product) => (
                         <ProductCard key={product.id} product={product} />
                     ))}
+                </div>
+
+                {/* Mobile/Tablet Carousel */}
+                <div className="lg:hidden mb-8">
+                    <div className="flex items-center justify-between mb-4">
+                        <div></div>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={prevNewArrivals}
+                                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                            >
+                                <ChevronLeft className="w-6 h-6" />
+                            </button>
+                            <button
+                                onClick={nextNewArrivals}
+                                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                            >
+                                <ChevronRight className="w-6 h-6" />
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div className="relative overflow-hidden">
+                        <div 
+                            className="flex transition-transform duration-500 ease-in-out gap-4"
+                            style={{ 
+                                transform: `translateX(-${currentNewArrivalsIndex * 280}px)`,
+                            }}
+                        >
+                            {newArrivals?.map((product) => (
+                                <div
+                                    key={product.id}
+                                    className="flex-shrink-0"
+                                    style={{ width: '260px' }}
+                                >
+                                    <ProductCard product={product} />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
 
                 <div className="text-center">
@@ -215,10 +291,51 @@ export default function HomePage() {
                     <h2 className="text-3xl lg:text-5xl font-extrabold text-gray-900 mb-4">TOP SELLING</h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                {/* Desktop Grid - Hidden on mobile */}
+                <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     {topSelling?.slice(0, 4).map((product) => (
                         <ProductCard key={product.id} product={product} />
                     ))}
+                </div>
+
+                {/* Mobile/Tablet Carousel */}
+                <div className="lg:hidden mb-8">
+                    <div className="flex items-center justify-between mb-4">
+                        <div></div>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={prevTopSelling}
+                                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                            >
+                                <ChevronLeft className="w-6 h-6" />
+                            </button>
+                            <button
+                                onClick={nextTopSelling}
+                                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                            >
+                                <ChevronRight className="w-6 h-6" />
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div className="relative overflow-hidden">
+                        <div 
+                            className="flex transition-transform duration-500 ease-in-out gap-4"
+                            style={{ 
+                                transform: `translateX(-${currentTopSellingIndex * 280}px)`,
+                            }}
+                        >
+                            {topSelling?.map((product) => (
+                                <div
+                                    key={product.id}
+                                    className="flex-shrink-0"
+                                    style={{ width: '260px' }}
+                                >
+                                    <ProductCard product={product} />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
 
                 <div className="text-center">
@@ -332,7 +449,7 @@ export default function HomePage() {
             <section className="container mx-auto px-4 py-16">
                 <div className="flex items-center justify-between mb-12">
                     <h2 className="text-2xl md:text-3xl lg:text-5xl font-extrabold text-gray-900">OUR HAPPY CUSTOMERS</h2>
-                    <div className="hidden md:flex gap-2">
+                    <div className="flex gap-2">
                         <button
                             onClick={prevReview}
                             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -348,66 +465,23 @@ export default function HomePage() {
                     </div>
                 </div>
 
-                {/* Mobile Reviews - Simple Grid */}
-                <div className="grid grid-cols-1 gap-6 md:hidden">
-                    {customerReviews.slice(0, 3).map((review, index) => (
-                        <div key={index} className="bg-white border border-gray-200 rounded-3xl p-6">
-                            {/* Star Rating */}
-                            <div className="flex mb-3">
-                                {[...Array(review.rating)].map((_, i) => (
-                                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                                ))}
-                            </div>
-                            
-                            {/* Reviewer Name with Verified Icon */}
-                            <div className="flex items-center gap-2 mb-3">
-                                <p className="font-bold text-lg text-gray-900">{review.name}</p>
-                                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                                    <Check className="w-4 h-4 text-white" />
-                                </div>
-                            </div>
-                            
-                            {/* Review Text */}
-                            <p className="text-gray-700 leading-relaxed text-base">
-                                "{review.review}"
-                            </p>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Desktop Reviews - Carousel */}
-                <div className="hidden md:block relative overflow-hidden">
+                {/* Unified Carousel for All Screen Sizes */}
+                <div className="relative overflow-hidden">
                     <div 
                         className="flex transition-transform duration-500 ease-in-out gap-6"
                         style={{ 
-                            transform: `translateX(calc(-${currentReviewIndex * 400}px + 50px))`,
+                            transform: `translateX(-${currentReviewIndex * 350}px)`,
                         }}
                     >
                         {customerReviews.map((review, index) => {
-                            const position = index - currentReviewIndex;
-                            const isVisible = position >= -1 && position <= 3;
-                            const isPartialLeft = position === -1;
-                            const isPartialRight = position === 3;
-                            const isFullyVisible = position >= 0 && position <= 2;
                             
                             return (
                                 <div
                                     key={index}
-                                    className={`flex-shrink-0 transition-all duration-500 ${
-                                        !isVisible 
-                                            ? 'opacity-0' 
-                                            : isPartialLeft || isPartialRight
-                                                ? 'opacity-40 blur-sm scale-95'
-                                                : isFullyVisible
-                                                    ? 'opacity-100 blur-0 scale-100'
-                                                    : 'opacity-100 blur-0 scale-100'
-                                    }`}
-                                    style={{ 
-                                        width: '400px',
-                                        height: '240px'
-                                    }}
+                                    className="flex-shrink-0"
+                                    style={{ width: '320px' }}
                                 >
-                                    <div className="bg-white border border-gray-200 rounded-3xl p-8 h-full flex flex-col">
+                                    <div className="bg-white border border-gray-200 rounded-3xl p-6 lg:p-8 h-full flex flex-col">
                                         {/* Star Rating */}
                                         <div className="flex mb-3">
                                             {[...Array(review.rating)].map((_, i) => (

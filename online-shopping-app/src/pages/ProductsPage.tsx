@@ -14,17 +14,31 @@ export default function ProductsPage() {
     const searchQuery = searchParams.get('search') || '';
     const categoryQuery = searchParams.get('category') || '';
 
-    const { data: products, isLoading } = useQuery({
-        queryKey: ['products', categoryQuery, searchQuery],
-        queryFn: () => productsApi.getAll({
-            category: categoryQuery || undefined,
-            search: searchQuery || undefined
-        })
+    const { data: allProducts, isLoading } = useQuery({
+        queryKey: ['products'],
+        queryFn: () => productsApi.getAll()
+    });
+
+    // Filter products based on search, category, and price range
+    const filteredProducts = allProducts?.filter(product => {
+        // Search filter
+        const matchesSearch = !searchQuery || 
+            product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            product.description.toLowerCase().includes(searchQuery.toLowerCase());
+
+        // Category filter
+        const matchesCategory = !categoryQuery || product.category === categoryQuery;
+
+        // Price range filter
+        const matchesPrice = product.price >= priceRange.min && product.price <= priceRange.max;
+
+        return matchesSearch && matchesCategory && matchesPrice;
     });
 
     const categories = [
-        'New Arrivals',
-        'Top Selling'
+        { value: '', label: 'All Categories' },
+        { value: 'new-arrivals', label: 'New Arrivals' },
+        { value: 'top-selling', label: 'Top Selling' }
     ];
 
     const handleCategoryChange = (category: string) => {
@@ -67,23 +81,21 @@ export default function ProductsPage() {
                         </button>
                     </div>
 
-                    {/* Categories */}
+                    {/* Categories - Radio Buttons */}
                     <div className="mb-6">
                         <h4 className="font-medium mb-3">Categories</h4>
                         <div className="space-y-2">
                             {categories.map((category) => (
-                                <label key={category} className="flex items-center">
+                                <label key={category.value} className="flex items-center cursor-pointer">
                                     <input
-                                        type="checkbox"
-                                        checked={selectedCategory === category.toLowerCase().replace(' ', '-')}
-                                        onChange={() => handleCategoryChange(
-                                            selectedCategory === category.toLowerCase().replace(' ', '-')
-                                                ? ''
-                                                : category.toLowerCase().replace(' ', '-')
-                                        )}
-                                        className="mr-2"
+                                        type="radio"
+                                        name="category"
+                                        value={category.value}
+                                        checked={selectedCategory === category.value}
+                                        onChange={() => handleCategoryChange(category.value)}
+                                        className="mr-3 text-black focus:ring-black"
                                     />
-                                    <span className="text-sm">{category}</span>
+                                    <span className="text-sm">{category.label}</span>
                                 </label>
                             ))}
                         </div>
@@ -119,7 +131,7 @@ export default function ProductsPage() {
                             {searchQuery ? `Search results for "${searchQuery}"` : 'All Products'}
                         </h1>
                         <p className="text-gray-600">
-                            Showing {products?.length || 0} results
+                            Showing {filteredProducts?.length || 0} results
                         </p>
                     </div>
 
@@ -134,13 +146,13 @@ export default function ProductsPage() {
 
                 {/* Products Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {products?.map((product) => (
+                    {filteredProducts?.map((product) => (
                         <ProductCard key={product.id} product={product} />
                     ))}
                 </div>
 
                 {/* Empty State */}
-                {products?.length === 0 && (
+                {filteredProducts?.length === 0 && (
                     <div className="text-center py-16">
                         <p className="text-gray-500 text-lg">No products found.</p>
                         <button
